@@ -1,13 +1,16 @@
 ﻿using Correios.App.Models;
+using Correios.App.Models.Response;
 
 namespace Correios.App.Services.Interfaces
 {
     public interface ICorreiosService
     {
-        Task<Package> GetPackageTrackingAsync(string packageCode);
+        Task<PackageResponse> TrackPackageByCode(string packageCode);
 
-        List<Package> VerifyIfContaisPackagesToDeliveryToday(List<Package> packages);
+        Task<List<PackageResponse>> TrackManyPackagesByCode(string[] packageCodes);
 
-        void PrintResultPackagesToDelivery(List<Package> packages);
+        List<PackageResponse> VerifyIfContaisPackagesToDeliveryToday(List<PackageResponse> packages);
+
+        void PrintResultPackagesToDelivery(List<PackageResponse> packages);
     }
 }

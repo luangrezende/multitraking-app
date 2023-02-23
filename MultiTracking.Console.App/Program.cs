@@ -1,4 +1,5 @@
-﻿using Correios.App.Services;
+﻿using Correios.App.Extensions;
+using Correios.App.Services;
 using Correios.App.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -26,7 +27,20 @@ namespace MultiTracking.Console.App
 
         private static void RunCorreiosService(ICorreiosService correiosService)
         {
-            var teste = correiosService.GetPackageTrackingAsync("NL382546014BR");
+            var codeList = new[] { 
+                "NA995321775BR", 
+                "NL396457447BR", 
+                "NL395094573BR", 
+                "NL391687369BR", 
+                "NL388201864BR",
+                "NL389426943BR",
+                "NL382546014BR"
+            };
+
+            var result = correiosService.TrackManyPackagesByCode(codeList).RunSync();
+            var resultFiltered = correiosService.VerifyIfContaisPackagesToDeliveryToday(result);
+
+            correiosService.PrintResultPackagesToDelivery(resultFiltered);
         }
     }
 }

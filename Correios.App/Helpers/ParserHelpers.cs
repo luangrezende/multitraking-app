@@ -4,12 +4,7 @@ using AngleSharp.Html.Parser;
 using Correios.App.Exceptions;
 using Correios.App.Extensions;
 using Correios.App.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+using Correios.App.Models.Response;
 
 namespace Correios.App.Helpers
 {
@@ -21,13 +16,13 @@ namespace Correios.App.Helpers
         /// <param name="html">html page</param>
         /// <returns>A Package</returns>
         /// <exception cref="Correios.NET.Exceptions.ParseException"></exception>
-        public static Package ParsePackage(string html)
+        public static PackageResponse ParsePackage(string html)
         {
             try
             {
                 var document = new HtmlParser().ParseDocument(html);
                 var packageCode = ParsePackageCode(document);
-                var package = new Package(packageCode);
+                var package = new PackageResponse(packageCode);
                 package.AddTrackingInfo(ParsePackageTracking(document));
                 return package;
             }
@@ -79,10 +74,12 @@ namespace Correios.App.Helpers
             {
                 foreach (var lines in statusLines.Select(ul => ul.Children))
                 {
-                    trackingStatus = new PackageTracking();
-                    trackingStatus.Status = lines[0].QuerySelector("b").Text().RemoveLineEndings();
-                    trackingStatus.Date = lines[1].Text().ExtractDateTime(packageDateTimePattern);
-                    trackingStatus.Source = lines[2].Text().RemoveLineEndings().Replace("Origem: ", string.Empty).Replace("Local: ", string.Empty);
+                    trackingStatus = new PackageTracking
+                    {
+                        Status = lines[0].QuerySelector("b").Text().RemoveLineEndings(),
+                        Date = lines[1].Text().ExtractDateTime(packageDateTimePattern),
+                        Source = lines[2].Text().RemoveLineEndings().Replace("Origem: ", string.Empty).Replace("Local: ", string.Empty)
+                    };
 
                     if (lines.Length >= 4)
                         trackingStatus.Destination = lines[3].Text().RemoveLineEndings().Replace("Destino: ", string.Empty);
@@ -95,7 +92,7 @@ namespace Correios.App.Helpers
                 throw new ParseException("Não foi possível converter o pacote/encomenda.", ex);
             }
 
-            if (tracking.Count() == 0)
+            if (tracking.Count == 0)
                 throw new ParseException("Rastreamento não encontrado.");
 
             return tracking;
