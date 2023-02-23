@@ -59,11 +59,11 @@ namespace Correios.App.Helpers
             }
         }
 
-        private static IEnumerable<PackageTracking> ParsePackageTracking(IHtmlDocument document)
+        private static IEnumerable<PackageTrackingResponse> ParsePackageTracking(IHtmlDocument document)
         {
-            var tracking = new List<PackageTracking>();
+            var tracking = new List<PackageTrackingResponse>();
 
-            PackageTracking trackingStatus = null;
+            PackageTrackingResponse trackingStatus = null;
             var statusLines = document.QuerySelectorAll(".singlepost > ul.linha_status");
             if (statusLines.Length == 0)
                 throw new ParseException("Postagem não encontrada e/ou Aguardando postagem pelo remetente.");
@@ -74,7 +74,7 @@ namespace Correios.App.Helpers
             {
                 foreach (var lines in statusLines.Select(ul => ul.Children))
                 {
-                    trackingStatus = new PackageTracking
+                    trackingStatus = new PackageTrackingResponse
                     {
                         Status = lines[0].QuerySelector("b").Text().RemoveLineEndings(),
                         Date = lines[1].Text().ExtractDateTime(packageDateTimePattern),

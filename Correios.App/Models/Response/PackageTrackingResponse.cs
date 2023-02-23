@@ -1,6 +1,6 @@
-﻿namespace Correios.App.Models
+﻿namespace Correios.App.Models.Response
 {
-    public class PackageTracking
+    public class PackageTrackingResponse
     {
         public DateTime Date { get; set; }
         public string Source { get; set; }

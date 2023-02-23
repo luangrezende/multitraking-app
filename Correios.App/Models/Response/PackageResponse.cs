@@ -15,12 +15,12 @@ namespace Correios.App.Models.Response
         public PackageResponse(string code)
         {
             SetCode(code);
-            TrackingHistory = new List<PackageTracking>();
+            TrackingHistory = new List<PackageTrackingResponse>();
         }
 
         public string Code { get { return _code; } }
-        public IList<PackageTracking> TrackingHistory { get; private set; }
-        public PackageTracking LastStatus { get { return TrackingHistory.FirstOrDefault(); } }
+        public IList<PackageTrackingResponse> TrackingHistory { get; private set; }
+        public PackageTrackingResponse LastStatus { get { return TrackingHistory.FirstOrDefault(); } }
         public DateTime? ShipDate { get { return TrackingHistory.Last().Date; } }
         public bool IsValid { get { return TrackingHistory.Any(); } }
 
@@ -32,12 +32,12 @@ namespace Correios.App.Models.Response
             _code = code;
         }
 
-        public void AddTrackingInfo(PackageTracking tracking)
+        public void AddTrackingInfo(PackageTrackingResponse tracking)
         {
             TrackingHistory.Add(tracking);
         }
 
-        public void AddTrackingInfo(IEnumerable<PackageTracking> list)
+        public void AddTrackingInfo(IEnumerable<PackageTrackingResponse> list)
         {
             foreach (var item in list)
             {
