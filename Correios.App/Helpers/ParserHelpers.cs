@@ -3,7 +3,6 @@ using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using Correios.App.Exceptions;
 using Correios.App.Extensions;
-using Correios.App.Models;
 using Correios.App.Models.Response;
 
 namespace Correios.App.Helpers
@@ -24,11 +23,14 @@ namespace Correios.App.Helpers
                 var packageCode = ParsePackageCode(document);
                 var package = new PackageResponse(packageCode);
                 package.AddTrackingInfo(ParsePackageTracking(document));
+
                 return package;
             }
             catch (ParseException ex)
             {
-                throw ex;
+                ConsoleInterfaceHelper.WriteWithColor(ex.Message, ConsoleColor.Red);
+                Console.WriteLine();
+                return new PackageResponse("BR000000000BR");
             }
             catch (Exception ex)
             {

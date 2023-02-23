@@ -19,7 +19,7 @@ namespace Correios.App.Services
 
         public List<PackageResponse> VerifyIfContaisPackagesToDeliveryToday(List<PackageResponse> packages)
         {
-            return packages.Where(x => x.LastStatus.Status.Equals(DescriptionsConsts.SAIU_PARA_ENTREGA)).ToList();
+            return packages.Where(x => x.LastStatus != null && x.LastStatus.Status.Equals(DescriptionsConsts.SAIU_PARA_ENTREGA)).ToList();
         }
 
         public void PrintResultPackagesToDelivery(List<PackageResponse> packages)
@@ -28,6 +28,7 @@ namespace Correios.App.Services
             {
                 ConsoleInterfaceHelper.WriteLineWithColor($"*** CORREIOS ***", ConsoleColor.Yellow);
                 Console.WriteLine($"Sem entregas até o momento");
+                Console.WriteLine();
             }
 
             foreach (var package in packages)
@@ -37,9 +38,8 @@ namespace Correios.App.Services
                 Console.WriteLine($"Data: {package.LastStatus.Date}");
                 Console.Write("Status: ");
                 ConsoleInterfaceHelper.WriteWithColor(package.LastStatus.Status, ConsoleColor.Green);
+                Console.WriteLine();
             }
-
-            Console.WriteLine();
         }
 
         public async Task<PackageResponse> TrackPackageByCode(string packageCode)

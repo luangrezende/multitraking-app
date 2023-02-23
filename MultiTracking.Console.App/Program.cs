@@ -32,7 +32,7 @@ namespace MultiTracking.Console.App
         private static void RunCorreiosService(ICorreiosService correiosService, IConfiguration config)
         {
             var codes = config
-               .GetSection("Codes")
+               .GetSection("Correios:Codes")
                .GetChildren()
                .Select(x => x.Value)
                .ToArray();
