@@ -31,16 +31,21 @@ namespace MultiTracking.Console.App
 
         private static void RunCorreiosService(ICorreiosService correiosService, IConfiguration config)
         {
-            var codes = config
-               .GetSection("Correios:Codes")
-               .GetChildren()
-               .Select(x => x.Value)
-               .ToArray();
+            while (true)
+            {
+                var codes = config
+                  .GetSection("Correios:Codes")
+                  .GetChildren()
+                  .Select(x => x.Value)
+                  .ToArray();
 
-            var result = correiosService.TrackManyPackagesByCode(codes).RunSync();
-            var resultFiltered = correiosService.VerifyIfContaisPackagesToDeliveryToday(result);
+                var result = correiosService.TrackManyPackagesByCode(codes).RunSync();
+                //var resultFiltered = correiosService.VerifyIfContaisPackagesToDeliveryToday(result);
 
-            correiosService.PrintResultPackagesToDelivery(resultFiltered);
+                correiosService.PrintResultPackagesToDelivery(result);
+
+                Task.Delay(10000).Wait();
+            }
         }
     }
 }

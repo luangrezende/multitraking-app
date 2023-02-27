@@ -1,7 +1,6 @@
 ﻿using Correios.App.Consts;
 using Correios.App.Extensions;
 using Correios.App.Helpers;
-using Correios.App.Models;
 using Correios.App.Models.Response;
 using Correios.App.Services.Interfaces;
 
@@ -24,6 +23,8 @@ namespace Correios.App.Services
 
         public void PrintResultPackagesToDelivery(List<PackageResponse> packages)
         {
+            Console.Clear();
+
             if (packages.Count <= 0)
             {
                 ConsoleInterfaceHelper.WriteLineWithColor($"*** CORREIOS ***", ConsoleColor.Yellow);
@@ -36,8 +37,20 @@ namespace Correios.App.Services
                 Console.WriteLine($"*** CORREIOS ***");
                 Console.WriteLine($"Codigo: {package.Code}");
                 Console.WriteLine($"Data: {package.LastStatus.Date}");
-                Console.Write("Status: ");
-                ConsoleInterfaceHelper.WriteWithColor(package.LastStatus.Status, ConsoleColor.Green);
+
+                if (package.LastStatus.Status.Equals(DescriptionsConsts.SAIU_PARA_ENTREGA))
+                {
+                    ConsoleInterfaceHelper.WriteLineWithColor(
+                        $"Status: {package.LastStatus.Status}",
+                        ConsoleColor.Green);
+                }
+                else
+                {
+                    ConsoleInterfaceHelper.WriteLineWithColor(
+                        $"Status: {package.LastStatus.Status}",
+                        ConsoleColor.Yellow);
+                }
+
                 Console.WriteLine();
             }
         }
