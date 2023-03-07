@@ -32,11 +32,11 @@ namespace Correios.App.Services
                 Console.WriteLine();
             }
 
-            foreach (var package in packages)
+            foreach (var package in packages.Where(x => x.LastStatus != null))
             {
                 Console.WriteLine($"*** CORREIOS ***");
                 Console.WriteLine($"Codigo: {package.Code}");
-                Console.WriteLine($"Data: {package.LastStatus.Date}");
+                VerifyIfIsToday(package.LastStatus.Date);
 
                 if (package.LastStatus.Status.Equals(DescriptionsConsts.SAIU_PARA_ENTREGA))
                 {
@@ -53,6 +53,18 @@ namespace Correios.App.Services
 
                 Console.WriteLine();
             }
+        }
+
+        private static void VerifyIfIsToday(DateTime date)
+        {
+            if (date.ToString("dd/MM/yyyy").Equals(DateTime.Now.AddDays(-1).ToString("dd/MM/yyyy")))
+            {
+                ConsoleInterfaceHelper.WriteLineWithColor(
+                        $"Data: {date}",
+                        ConsoleColor.Green);
+            }
+
+            Console.WriteLine($"Data: {date}");
         }
 
         public async Task<PackageResponse> TrackPackageByCode(string packageCode)
