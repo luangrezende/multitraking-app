@@ -57,14 +57,16 @@ namespace Correios.App.Services
 
         private static void VerifyIfIsToday(DateTime date)
         {
-            if (date.ToString("dd/MM/yyyy").Equals(DateTime.Now.AddDays(-1).ToString("dd/MM/yyyy")))
+            if (date.ToString("dd/MM/yyyy").Equals(DateTime.Now.ToString("dd/MM/yyyy")))
             {
                 ConsoleInterfaceHelper.WriteLineWithColor(
                         $"Data: {date}",
                         ConsoleColor.Green);
             }
-
-            Console.WriteLine($"Data: {date}");
+            else
+            {
+                Console.WriteLine($"Data: {date}");
+            }
         }
 
         public async Task<PackageResponse> TrackPackageByCode(string packageCode)
